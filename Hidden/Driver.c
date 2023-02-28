@@ -47,7 +47,8 @@ NTSTATUS InitializeStealthMode(PDRIVER_OBJECT DriverObject, PUNICODE_STRING Regi
 
 	normalized.Length = 0;
 	normalized.MaximumLength = LdrEntry->FullModuleName.Length + NORMALIZE_INCREAMENT;
-	normalized.Buffer = (PWCH)ExAllocatePoolWithQuotaTag(PagedPool, normalized.MaximumLength, DRIVER_ALLOC_TAG);
+        normalized.Buffer = (PWCH)ExAllocatePool2(
+            POOL_FLAG_PAGED, normalized.MaximumLength, DRIVER_ALLOC_TAG);
 	
 	if (!normalized.Buffer)
 	{

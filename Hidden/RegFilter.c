@@ -70,7 +70,8 @@ BOOLEAN CheckRegistryKeyInExcludeList(PVOID RootObject, PUNICODE_STRING keyPath)
 		if (totalSize / sizeof(WCHAR) > LOCAL_BUF_SIZE)
 		{
 			// local buffer too small, we should allocate memory
-			dynBuffer = (LPWSTR)ExAllocatePoolWithTag(NonPagedPool, totalSize, FILTER_ALLOC_TAG);
+                        dynBuffer = (LPWSTR)ExAllocatePool2(
+                            POOL_FLAG_NON_PAGED, totalSize, FILTER_ALLOC_TAG);
 			if (!dynBuffer)
 			{
 				LogWarning("Error, memory allocation failed with code:%08x\n", status);
@@ -243,7 +244,9 @@ NTSTATUS RegPostEnumKey(PVOID context, PREG_POST_OPERATION_INFORMATION info)
 			return STATUS_SUCCESS;
 		}
 
-		tempBuffer = (LPWSTR)ExAllocatePoolWithTag(PagedPool, preInfo->Length, FILTER_ALLOC_TAG);
+		tempBuffer = (LPWSTR)ExAllocatePool2(
+                    POOL_FLAG_PAGED, preInfo->Length,
+                                                     FILTER_ALLOC_TAG);
 		if (tempBuffer)
 		{
 			for (i = 0; infinite; i++)
@@ -358,7 +361,9 @@ NTSTATUS RegPostEnumValue(PVOID context, PREG_POST_OPERATION_INFORMATION info)
 			return STATUS_SUCCESS;
 		}
 
-		tempBuffer = (LPWSTR)ExAllocatePoolWithTag(PagedPool, preInfo->Length, FILTER_ALLOC_TAG);
+		tempBuffer = (LPWSTR)ExAllocatePool2(
+                    POOL_FLAG_PAGED, preInfo->Length,
+                                                     FILTER_ALLOC_TAG);
 		if (tempBuffer)
 		{
 
@@ -584,7 +589,8 @@ NTSTATUS AddCurrentControlSetVariants(PUNICODE_STRING KeyPath, ExcludeContext Co
 	if (tailed && KeyPath->Buffer[currVersion.Length / sizeof(WCHAR)] != L'\\')
 		return STATUS_SUCCESS;
 
-	currVersionXXX.Buffer = (LPWSTR)ExAllocatePoolWithTag(NonPagedPool, KeyPath->Length, FILTER_ALLOC_TAG);
+	currVersionXXX.Buffer = (LPWSTR)ExAllocatePool2(
+            POOL_FLAG_NON_PAGED, KeyPath->Length, FILTER_ALLOC_TAG);
 	currVersionXXX.Length = 0;
 	currVersionXXX.MaximumLength = KeyPath->Length;
 

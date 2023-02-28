@@ -848,7 +848,7 @@ NTSTATUS AddHiddenFile(PUNICODE_STRING FilePath, PULONGLONG ObjId)
 	UNICODE_STRING normalized;
 	NTSTATUS status;
 
-	normalized.Buffer = (PWCH)ExAllocatePoolWithTag(PagedPool, maxBufSize, FSFILTER_ALLOC_TAG);
+	normalized.Buffer = (PWCH)ExAllocatePool2(POOL_FLAG_PAGED, maxBufSize, FSFILTER_ALLOC_TAG);
 	normalized.Length = 0;
 	normalized.MaximumLength = maxBufSize;
 
@@ -905,7 +905,8 @@ NTSTATUS AddHiddenDir(PUNICODE_STRING DirPath, PULONGLONG ObjId)
 	UNICODE_STRING normalized;
 	NTSTATUS status;
 
-	normalized.Buffer = (PWCH)ExAllocatePoolWithTag(PagedPool, maxBufSize, FSFILTER_ALLOC_TAG);
+	normalized.Buffer = (PWCH)ExAllocatePool2(POOL_FLAG_PAGED, maxBufSize,
+                                                  FSFILTER_ALLOC_TAG);
 	normalized.Length = 0;
 	normalized.MaximumLength = maxBufSize;
 

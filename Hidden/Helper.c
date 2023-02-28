@@ -20,7 +20,7 @@ NTSTATUS QuerySystemInformation(SYSTEM_INFORMATION_CLASS Class, PVOID* InfoBuffe
 		if (info)
 			ExFreePoolWithTag(info, HELPER_ALLOC_TAG);
 
-		info = ExAllocatePoolWithTag(NonPagedPool, size, HELPER_ALLOC_TAG);
+		info = ExAllocatePool2(POOL_FLAG_NON_PAGED, size, HELPER_ALLOC_TAG);
 		if (!info)
 			break;
 
@@ -60,7 +60,7 @@ NTSTATUS QueryProcessInformation(PROCESSINFOCLASS Class, HANDLE Process, PVOID* 
 		if (info)
 			ExFreePoolWithTag(info, HELPER_ALLOC_TAG);
 
-		info = ExAllocatePoolWithTag(NonPagedPool, size, HELPER_ALLOC_TAG);
+		info = ExAllocatePool2(POOL_FLAG_NON_PAGED, size, HELPER_ALLOC_TAG);
 		if (!info)
 			break;
 

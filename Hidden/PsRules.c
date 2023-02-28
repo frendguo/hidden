@@ -33,7 +33,7 @@ _Function_class_(RTL_AVL_ALLOCATE_ROUTINE)
 PVOID AllocatePsRuleEntry(struct _RTL_AVL_TABLE  *Table, CLONG  ByteSize)
 {
 	UNREFERENCED_PARAMETER(Table);
-	return ExAllocatePoolWithTag(NonPagedPool, ByteSize, PSRULE_ALLOC_TAG);
+        return ExAllocatePool2(POOL_FLAG_NON_PAGED, ByteSize, PSRULE_ALLOC_TAG);
 }
 
 _Function_class_(RTL_AVL_FREE_ROUTINE)
@@ -48,7 +48,9 @@ NTSTATUS InitializePsRuleListContext(PPsRulesContext pRuleContext)
 	NTSTATUS status = STATUS_SUCCESS;
 	PPsRulesInternalContext context;
 
-	context = (PPsRulesInternalContext)ExAllocatePoolWithTag(NonPagedPool, sizeof(PsRulesInternalContext), PSRULE_ALLOC_TAG);
+	context = (PPsRulesInternalContext)ExAllocatePool2(
+            POOL_FLAG_NON_PAGED, sizeof(PsRulesInternalContext),
+            PSRULE_ALLOC_TAG);
 	if (!context)
 	{
 		LogWarning("Error, can't allocate memory");
@@ -86,7 +88,8 @@ NTSTATUS AddRuleToPsRuleList(PsRulesContext RuleContext, PUNICODE_STRING ImgPath
 	}
 
 	entryLen = sizeof(PsRuleEntry) + ImgPath->Length;
-	entry = (PPsRuleEntry)ExAllocatePoolWithTag(NonPagedPool, entryLen, PSRULE_ALLOC_TAG);
+        entry = (PPsRuleEntry)ExAllocatePool2(POOL_FLAG_NON_PAGED, entryLen,
+                                              PSRULE_ALLOC_TAG);
 	if (!entry)
 	{
 		LogWarning("Error, can't allocate memory");

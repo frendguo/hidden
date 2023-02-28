@@ -29,7 +29,7 @@ _Function_class_(RTL_AVL_ALLOCATE_ROUTINE)
 PVOID AllocateProcessTableEntry(struct _RTL_AVL_TABLE  *Table, CLONG  ByteSize)
 {
 	UNREFERENCED_PARAMETER(Table);
-	return ExAllocatePoolWithTag(NonPagedPool, ByteSize, PSTREE_ALLOC_TAG);
+        return ExAllocatePool2(POOL_FLAG_NON_PAGED, ByteSize, PSTREE_ALLOC_TAG);
 }
 
 _Function_class_(RTL_AVL_FREE_ROUTINE)

@@ -49,7 +49,9 @@ NTSTATUS InitializeExcludeListContext(PExcludeContext Context, UINT32 Type)
 		return STATUS_INVALID_MEMBER;
 	}
 
-	cntx = (PEXCLUDE_FILE_CONTEXT)ExAllocatePoolWithTag(NonPagedPool, sizeof(EXCLUDE_FILE_CONTEXT), EXCLUDE_ALLOC_TAG);
+	cntx = (PEXCLUDE_FILE_CONTEXT)ExAllocatePool2(
+            POOL_FLAG_NON_PAGED, sizeof(EXCLUDE_FILE_CONTEXT),
+            EXCLUDE_ALLOC_TAG);
 	if (!cntx)
 	{
 		LogWarning("Error, can't allocate memory for context: %p", Context);
@@ -117,7 +119,7 @@ NTSTATUS AddExcludeListEntry(ExcludeContext Context, PUNICODE_STRING FilePath, U
 	// Allocate and fill new list entry
 	
 	size = sizeof(EXCLUDE_FILE_LIST_ENTRY) + FilePath->Length + sizeof(WCHAR);
-	entry = ExAllocatePoolWithTag(NonPagedPool, size, EXCLUDE_ALLOC_TAG);
+        entry = ExAllocatePool2(POOL_FLAG_NON_PAGED, size, EXCLUDE_ALLOC_TAG);
 	if (entry == NULL)
 	{
 		LogWarning("Warning, exclude file list is not NULL : %p", cntx);
